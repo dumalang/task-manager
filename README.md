@@ -21,7 +21,7 @@ Running the test:
 - run `npm run test`
 
 ## Credits
-This basic of this project is what i learn from
+The basic of this project is what i learn from
 [https://www.udemy.com/the-complete-nodejs-developer-course-2/]
 Created by Andrew Mead, Rob Percival 
 
