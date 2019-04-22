@@ -1,0 +1,28 @@
+{{!< ../layouts/default}}
+
+{{#contentFor 'title'}}
+{{/contentFor}}
+
+{{#contentFor 'css'}}
+    <style>
+        h1 {
+            color: grey;
+        }
+    </style>
+{{/contentFor}}
+
+{{#contentFor 'body'}}
+    
+    <h1>{{title}}</h1>
+    It feels like using blade
+
+    <ul>
+    {{#each data as |row|}}
+        <li>{{row.name}}, {{row.age}}</li>
+    {{/each}}
+    </ul>
+
+{{/contentFor}}
+
+{{#contentFor 'js'}}
+{{/contentFor}}
