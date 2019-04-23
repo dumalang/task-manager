@@ -7,7 +7,8 @@
     "start": "node src/index.js",
     "dev": "./node_modules/.bin/env-cmd .env nodemon $NODE_DEBUG_OPTION src/index.js",
     "dev-dbprod": "./node_modules/.bin/env-cmd .env.db_prod nodemon $NODE_DEBUG_OPTION src/index.js",
-    "test": "./node_modules/.bin/env-cmd .env.test jest --watch --runInBand"
+    "test": "./node_modules/.bin/env-cmd .env.test jest --runInBand",
+    "test-dev": "./node_modules/.bin/env-cmd .env.test jest --watch --runInBand"
   },
   "jest": {
     "testEnvironment": "node"
