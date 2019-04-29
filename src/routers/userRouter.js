@@ -5,13 +5,15 @@ const userController = require('../app/Http/Controllers/userController')
 const auth = require('../app/Http/Middleware/authMiddleware')
 const upload = require('../app/Utils/upload')
 
+const createUserRequest = require('../app/Http/Requests/user/createUserRequest')
+
 router.get('/', auth, userController.index)
 
 router.get('/me', auth, userController.showMe)
 
 router.get('/:id', auth, userController.show)
 
-router.post('/', userController.store)
+router.post('/', createUserRequest, userController.store)
 
 router.patch('/me', auth, userController.update)
 
