@@ -106,6 +106,13 @@ userSchema.virtual('tasks', {
     foreignField: 'user_id'
 })
 
+userSchema.virtual('taskCount', {
+    ref: 'Task',
+    localField: '_id',
+    foreignField: 'user_id',
+    count: true
+});
+
 const User = mongoose.model('User', userSchema)
 
 module.exports = User;

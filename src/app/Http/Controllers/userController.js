@@ -145,37 +145,51 @@ const logoutAll = async (req, res) => {
 }
 
 const getTasks = async (req, res) => {
-    try {
-        const user = req.user
-        var match = {}
-        var options = {}
-        if (req.query.completed) {
-            match.completed = req.query.completed === 'true'
-        }
-        if (req.query.skip) {
-            options.skip = Number(req.query.skip)
-        }
-        if (req.query.limit) {
-            options.limit = Number(req.query.limit)
-        }
-        if (req.query.sort_by) {
-            const sortBy = req.query.sort_by
-            var sortByArr = sortBy.split(",")
-            var sortField = sortByArr[0]
-            var sortDirection = sortByArr[1] === 'desc' ? -1 : 1
-            var sort = {}
-            sort[sortField] = sortDirection
-            options.sort = sort
-        }
-        await user.populate({
-            path: 'tasks',
-            match,
-            options
-        }).execPopulate()
-        res.send(TaskResource.collection(new Paginator(user.tasks), true))
-    } catch (e) {
-        res.status(500).send(e.message)
+    const user = req.user
+
+    var match = {}
+    var options = {}
+    var perPage = 5;
+    var page = 1;
+
+    if (req.query.completed) {
+        match.completed = req.query.completed === 'true'
     }
+    if (req.query.per_page) {
+        perPage = Number(req.query.per_page)
+        options.limit = perPage
+    }
+    if (req.query.page) {
+        page = Number(req.query.page)
+        page = page <= 0 ? 1 : page
+        options.skip = (page - 1) * perPage
+    }
+
+    if (req.query.sort_by) {
+        const sortBy = req.query.sort_by
+        var sortByArr = sortBy.split(",")
+        var sortField = sortByArr[0]
+        var sortDirection = sortByArr[1] === 'desc' ? -1 : 1
+        var sort = {}
+        sort[sortField] = sortDirection
+        options.sort = sort
+    }
+
+    await user.populate({
+        path: 'tasks',
+        match,
+        options
+    }).execPopulate()
+
+    await user.populate({
+        path: 'taskCount',
+        match
+    }).execPopulate()
+
+    const paginator = new Paginator(user.tasks, page, perPage, user.taskCount, req);
+
+    res.send(TaskResource.collection(paginator, true))
+
 }
 
 const uploadAvatar = async (req, res) => {
